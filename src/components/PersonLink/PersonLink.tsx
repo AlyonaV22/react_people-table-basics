@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { PersonLinkItem } from '../PersonLinkItem/PersonLinkItem';
 import { Person } from '../../types/Person';
 import cn from 'classnames';
 
@@ -31,14 +31,13 @@ export const PersonLink: React.FC<Props> = ({ person, prevSlug }) => {
       })}
     >
       <td>
-        <NavLink
+        <PersonLinkItem
           to={`/people/${slug}`}
+          name={name}
           className={cn({
             'has-text-danger': sex === 'f',
           })}
-        >
-          {name}
-        </NavLink>
+        />
       </td>
 
       <td>{sex}</td>
@@ -46,9 +45,11 @@ export const PersonLink: React.FC<Props> = ({ person, prevSlug }) => {
       <td>{died}</td>
       <td>
         {mother ? (
-          <NavLink to={`/people/${mother.slug}`} className="has-text-danger">
-            {mother.name}
-          </NavLink>
+          <PersonLinkItem
+            to={`/people/${mother.slug}`}
+            name={mother.name}
+            className="has-text-danger"
+          />
         ) : (
           motherName || '-'
         )}
@@ -56,7 +57,7 @@ export const PersonLink: React.FC<Props> = ({ person, prevSlug }) => {
 
       <td>
         {father ? (
-          <NavLink to={`/people/${father.slug}`}>{father.name}</NavLink>
+          <PersonLinkItem to={`/people/${father.slug}`} name={father.name} />
         ) : (
           fatherName || '-'
         )}
