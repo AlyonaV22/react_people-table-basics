@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
 import { Person } from '../../types/Person';
-import cn from 'classnames';
+import { PersonLink } from '../PersonLink/PersonLink';
 
 enum Properties {
   Name = 'Name',
@@ -13,19 +12,17 @@ enum Properties {
 }
 
 interface Props {
-  tablePeople: Person[];
+  people: Person[];
 }
 
-export const PeopleTable: React.FC<Props> = props => {
-  const { tablePeople } = props;
-
+export const PeopleTable: React.FC<Props> = ({ people }) => {
   const { slug: prevSlug } = useParams();
 
   const findMotherAndFather = (nameOfParent: string | null): Person | null => {
-    return tablePeople.find(person => person.name === nameOfParent) || null;
+    return people.find(({ name }) => name === nameOfParent) || null;
   };
 
-  const selectedPeople = tablePeople.map(person => {
+  const selectedPeople = people.map(person => {
     return {
       ...person,
       father: findMotherAndFather(person.fatherName),
@@ -40,8 +37,8 @@ export const PeopleTable: React.FC<Props> = props => {
     >
       <thead>
         <tr>
-          {Object.values(Properties).map((proper, index) => (
-            <th key={index}>{proper}</th>
+          {Object.values(Properties).map(proper => (
+            <th key={proper}>{proper}</th>
           ))}
         </tr>
       </thead>
@@ -49,50 +46,11 @@ export const PeopleTable: React.FC<Props> = props => {
       <tbody>
         {selectedPeople.map(person => {
           return (
-            <tr
+            <PersonLink
               key={person.slug}
-              data-cy="person"
-              className={cn({
-                'has-background-warning': person.slug === prevSlug,
-              })}
-            >
-              <td>
-                <NavLink
-                  to={`/people/${person.slug}`}
-                  className={cn({
-                    'has-text-danger': person.sex === 'f',
-                  })}
-                >
-                  {person.name}
-                </NavLink>
-              </td>
-
-              <td>{person.sex === 'm' ? 'm' : 'f'}</td>
-              <td>{person.born}</td>
-              <td>{person.died}</td>
-              <td>
-                {person.mother ? (
-                  <NavLink
-                    to={`/people/${person.mother.slug}`}
-                    className="has-text-danger"
-                  >
-                    {person.mother.name}
-                  </NavLink>
-                ) : (
-                  person.motherName || '-'
-                )}
-              </td>
-
-              <td>
-                {person.father ? (
-                  <NavLink to={`/people/${person.father.slug}`}>
-                    {person.father.name}
-                  </NavLink>
-                ) : (
-                  person.fatherName || '-'
-                )}
-              </td>
-            </tr>
+              person={person}
+              prevSlug={prevSlug || ''}
+            />
           );
         })}
       </tbody>

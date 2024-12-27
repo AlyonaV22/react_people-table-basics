@@ -6,7 +6,7 @@ import { getPeople } from '../api';
 
 export const PeoplePage = () => {
   const [tablePeople, setTablePeople] = useState<Person[]>([]);
-  const [hasLoading, setHasloading] = useState<boolean>(true);
+  const [hasLoading, setHasLoading] = useState<boolean>(true);
   const [hasError, setHasError] = useState<boolean>(false);
 
   const hasTablePeople = !!tablePeople.length && !hasLoading && !hasError;
@@ -20,7 +20,7 @@ export const PeoplePage = () => {
       } catch (error) {
         setHasError(true);
       } finally {
-        setHasloading(false);
+        setHasLoading(false);
       }
     };
 
@@ -41,7 +41,7 @@ export const PeoplePage = () => {
           {!tablePeople.length && !hasLoading && (
             <p data-cy="noPeopleMessage">There are no people on the server</p>
           )}
-          {hasTablePeople && <PeopleTable tablePeople={tablePeople} />}
+          {hasTablePeople && <PeopleTable people={tablePeople} />}
         </div>
       </div>
     </>
